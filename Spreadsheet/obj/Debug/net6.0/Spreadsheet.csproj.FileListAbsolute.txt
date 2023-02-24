@@ -1,0 +1,17 @@
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/bin/Debug/net6.0/Spreadsheet.deps.json
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/bin/Debug/net6.0/Spreadsheet.dll
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/bin/Debug/net6.0/Spreadsheet.pdb
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/bin/Debug/net6.0/DependencyGraph.dll
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/bin/Debug/net6.0/Formula.dll
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/bin/Debug/net6.0/DependencyGraph.pdb
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/bin/Debug/net6.0/Formula.pdb
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/Spreadsheet.csproj.AssemblyReference.cache
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/Spreadsheet.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/Spreadsheet.AssemblyInfoInputs.cache
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/Spreadsheet.AssemblyInfo.cs
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/Spreadsheet.csproj.CoreCompileInputs.cache
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/Spreadsheet.csproj.CopyComplete
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/Spreadsheet.dll
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/refint/Spreadsheet.dll
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/Spreadsheet.pdb
+/Users/sasharybalkina/Projects/spreadsheetNew/Spreadsheet/obj/Debug/net6.0/ref/Spreadsheet.dll

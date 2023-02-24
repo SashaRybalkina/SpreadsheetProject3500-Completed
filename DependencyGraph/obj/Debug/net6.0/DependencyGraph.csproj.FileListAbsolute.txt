@@ -1,0 +1,12 @@
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/bin/Debug/net6.0/DependencyGraph.deps.json
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/bin/Debug/net6.0/DependencyGraph.dll
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/bin/Debug/net6.0/DependencyGraph.pdb
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/DependencyGraph.csproj.AssemblyReference.cache
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/DependencyGraph.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/DependencyGraph.AssemblyInfoInputs.cache
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/DependencyGraph.AssemblyInfo.cs
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/DependencyGraph.csproj.CoreCompileInputs.cache
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/DependencyGraph.dll
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/refint/DependencyGraph.dll
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/DependencyGraph.pdb
+/Users/sasharybalkina/Projects/spreadsheetNew/DependencyGraph/obj/Debug/net6.0/ref/DependencyGraph.dll
