@@ -138,13 +138,13 @@ namespace SS
         /// <exception cref="InvalidNameException"></exception>
         public override object GetCellContents(string name)
         {
-            if (name != null && Regex.IsMatch(name, @"^[a-z|A-Z|]+[0-9]+$"))
+            if (name != null && Regex.IsMatch(Normalize(name), @"^[a-z|A-Z|]+[0-9]+$"))
             {
-                if (!cells.ContainsKey(name))
+                if (!cells.ContainsKey(Normalize(name)))
                 {
                     return "";
                 }
-                return cells[name].GetContents();
+                return cells[Normalize(name)].GetContents();
             }
             throw new InvalidNameException();
         }
@@ -156,11 +156,15 @@ namespace SS
         /// <returns>The value of the cell</returns>
         public override object GetCellValue(string name)
         {
-            if (name == null || !Regex.IsMatch(name, "^[a-z|A-Z]+[0-9]+$") || !IsValid(name))
+            if (name == null || !Regex.IsMatch(Normalize(name), "^[a-z|A-Z]+[0-9]+$") || !IsValid(name))
             {
                 throw new InvalidNameException();
             }
-            return cells[name].GetValue();
+            if (!cells.ContainsKey(Normalize(name)))
+            {
+                return "";
+            }
+            return cells[Normalize(name)].GetValue();
         }
 
         /// <summary>
@@ -222,38 +226,45 @@ namespace SS
         /// <param name="filename">The file being looked at</param>
         public override void Save(string filename)
         {
-            using XmlWriter write = XmlWriter.Create(filename);
-            ///Writes spreadsheet start element
-            write.WriteStartDocument();
-            write.WriteStartElement("spreadsheet");
-            write.WriteAttributeString("version", Version);
-
-            foreach (string cell in cells.Keys)
+            try
             {
-                write.WriteStartElement("cell");
-                string name = cell;
-                string contents = "";
-                object objectContents = cells[cell].GetContents();
-                ///If statements for handling different types of contents.
-                if (objectContents is double)
+                using XmlWriter write = XmlWriter.Create(filename);
+                ///Writes spreadsheet start element
+                write.WriteStartDocument();
+                write.WriteStartElement("spreadsheet");
+                write.WriteAttributeString("version", Version);
+
+                foreach (string cell in cells.Keys)
                 {
-                    contents = objectContents.ToString();
+                    write.WriteStartElement("cell");
+                    string name = cell;
+                    string contents = "";
+                    object objectContents = cells[cell].GetContents();
+                    ///If statements for handling different types of contents.
+                    if (objectContents is double)
+                    {
+                        contents = objectContents.ToString();
+                    }
+                    else if (objectContents is string)
+                    {
+                        contents = (string)objectContents;
+                    }
+                    else if (objectContents is Formula)
+                    {
+                        contents = "=" + objectContents.ToString();
+                    }
+                    write.WriteElementString("name", name);
+                    write.WriteElementString("contents", contents);
+                    write.WriteEndElement();
                 }
-                else if (objectContents is string)
-                {
-                    contents = (string)objectContents;
-                }
-                else if (objectContents is Formula)
-                {
-                    contents = "=" + objectContents.ToString();
-                }
-                write.WriteElementString("name", name);
-                write.WriteElementString("contents", contents);
                 write.WriteEndElement();
+                write.WriteEndDocument();
+                Changed = false;
             }
-            write.WriteEndElement();
-            write.WriteEndDocument();
-            Changed = false;
+            catch
+            {
+                throw new SpreadsheetReadWriteException("Cannot find file");
+            }
         }
 
         /// <summary>
