@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GUI.MainPage">
+     <ScrollView
+                    x:Name="Table"
+                    Orientation="Both"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalScrollBarVisibility="Always"
+                    HeightRequest="500">
+        <VerticalStackLayout x:Name="Entire">
+            <!-- A Place to put the currently selected cell "name" and "value" -->
+            <Border
+                StrokeThickness="0"
+                HeightRequest="40">
+                <HorizontalStackLayout>
+                <Label x:Name="selectedCell" Text="Stuff could go here" WidthRequest="100"/>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- the column headers: A, B, C, ... -->
+            <HorizontalStackLayout x:Name="TopLabels" BackgroundColor="HotPink"/>
+
+            <!-- the Grid of Spreadsheet GUI Cells -->
+            <ScrollView>
+                <HorizontalStackLayout>
+                    <VerticalStackLayout x:Name="LeftLabels"  BackgroundColor="HotPink">  </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="Grid"        BackgroundColor="Pink"></VerticalStackLayout>
+                </HorizontalStackLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
