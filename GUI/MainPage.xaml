@@ -1,36 +1,59 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GUI.MainPage">
-	<ScrollView
-				   x:Name="Table"
-				   Orientation="Both"
-				   HorizontalOptions="FillAndExpand"
-				   HorizontalScrollBarVisibility="Always"
-				   HeightRequest="500">
-		<VerticalStackLayout x:Name="Entire">
-			<!-- A Place to put the currently selected cell "name" and "value" -->
-			<Border
+     <ScrollView
+                    x:Name="Table"
+                    Orientation="Both"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalScrollBarVisibility="Always"
+                    HeightRequest="500">
+        <VerticalStackLayout x:Name="Entire">
+            <!-- A Place to put the currently selected cell "name" and "value" -->
+            <Border
                 StrokeThickness="0"
                 HeightRequest="40">
-				<HorizontalStackLayout>
-					<Label x:Name="CellName" Text="" WidthRequest="100"/>
-					<Label x:Name="Value" Text="" WidthRequest="100"/>
-					<Entry x:Name="Contents" Text="" WidthRequest="100"/>
-				</HorizontalStackLayout>
-			</Border>
+                <HorizontalStackLayout>
+                <Label x:Name="CellName" Text="A1" WidthRequest="100"/>
+                <Label x:Name="Value" Text="" WidthRequest="100"/>
+                <Entry x:Name="Contents" Text="" WidthRequest="100"/>
 
-			<!-- the column headers: A, B, C, ... -->
-			<HorizontalStackLayout x:Name="TopLabels" BackgroundColor="HotPink"/>
+                <Button x:Name="Help" Text="Help" Clicked="OnHelpClicked" HorizontalOptions="Center"/>
+                <Button x:Name="IdiotButton" Text="Click Me (If You Dare)" Clicked="OnIdiotClicked" HorizontalOptions="Center"/>
 
-			<!-- the Grid of Spreadsheet GUI Cells -->
-			<ScrollView>
-				<HorizontalStackLayout>
-					<VerticalStackLayout x:Name="LeftLabels"  BackgroundColor="HotPink">  </VerticalStackLayout>
-					<VerticalStackLayout x:Name="Grid"        BackgroundColor="Pink"></VerticalStackLayout>
-				</HorizontalStackLayout>
-			</ScrollView>
-		</VerticalStackLayout>
-	</ScrollView>
+                <TableView Intent="Menu">
+                    <TableRoot>
+                        <TableSection Title="File">
+                            <TextCell
+                                Text="New"
+                                Detail="Creat a new file."
+                                Clicked="NewFile"/>   
+                            <TextCell
+                                Text="Save"
+                                Detail="Save spreadsheet to a file."
+                                Command="{Binding SaveCommand}"/>
+                            <TextCell
+                                Text="Open"
+                                Detail="Select existing spreadsheet file."
+                                Command="{Binding OpenCommand}"/>  
+                        </TableSection>
+                    </TableRoot>
+                </TableView>
+
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- the column headers: A, B, C, ... -->
+            <HorizontalStackLayout x:Name="TopLabels" BackgroundColor="HotPink"/>
+
+            <!-- the Grid of Spreadsheet GUI Cells -->
+            <ScrollView>
+                <HorizontalStackLayout>
+                    <VerticalStackLayout x:Name="LeftLabels"  BackgroundColor="HotPink">  </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="Grid"        BackgroundColor="Pink"></VerticalStackLayout>
+                </HorizontalStackLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>
