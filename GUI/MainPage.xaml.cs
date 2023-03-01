@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Windows.Input;
 using SS;
 using Label = Microsoft.Maui.Controls.Label;
 
@@ -16,7 +17,7 @@ public partial class MainPage : ContentPage
 
     private Dictionary<string, Entry> cells = new();
 
-    private AbstractSpreadsheet spreadsheet = new Spreadsheet();
+    private AbstractSpreadsheet spreadsheet = new Spreadsheet(s => true, s => s.ToUpper(), "six");
 
     public MainPage()
     {
@@ -108,62 +109,130 @@ public partial class MainPage : ContentPage
         }
         Contents.Completed += OnEntryCompletedWidget;
     }
-    private void SetCell(object sender, EventArgs e)
-    {
-        cells[CellName.Text].Focus();
-        spreadsheet.SetContentsOfCell(CellName.Text, cells[CellName.Text].Text);
-        cells[CellName.Text].Text = "" + spreadsheet.GetCellValue(CellName.Text);
-    }
 
     private void OnFocus(object sender, EventArgs e)
     {
-        Entry entry = (Entry)sender;
-        string name = entry.StyleId;
-        CellName.Text = name;
-        Contents.Text = spreadsheet.GetCellContents(name) + "";
-        Value.Text = spreadsheet.GetCellValue(name) + "";
-        cells[name].Text = spreadsheet.GetCellContents(name).ToString();
+        try
+        {
+
+            Entry entry = (Entry)sender;
+            string name = entry.StyleId;
+            CellName.Text = name;
+            Contents.Text = spreadsheet.GetCellContents(name) + "";
+            Value.Text = spreadsheet.GetCellValue(name) + "";
+            cells[name].Text = spreadsheet.GetCellContents(name).ToString();
+        }
+        catch
+        {
+            InvalidFormulaDisplay();
+        }
     }
 
     private void OnUnFocus(object sender, EventArgs e)
     {
-        Entry entry = (Entry)sender;
-        string name = entry.StyleId;
-        cells[name].Text = spreadsheet.GetCellValue(name).ToString();
-
+        try
+        {
+            Entry entry = (Entry)sender;
+            string name = entry.StyleId;
+            cells[name].Text = spreadsheet.GetCellValue(name).ToString();
+        }
+        catch
+        {
+            InvalidFormulaDisplay();
+        }
     }
 
     private void OnEntryCompletedWidget(object sender, EventArgs e)
     {
-        Entry entry = (Entry)sender;
-        spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
-        cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
-        Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
-        Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+        try
+        {
+            Entry entry = (Entry)sender;
+            spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
+            cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+            Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
+            Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+        }
+        catch
+        {
+            InvalidFormulaDisplay();
+        }
     }
 
     private void OnEntryCompletedCell(object sender, EventArgs e)
     {
-        Entry entry = (Entry)sender;
-        spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
-        cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
-        Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
-        Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+        try
+        {
+            Entry entry = (Entry)sender;
+            spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
+            cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+            Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
+            Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+        }
+        catch
+        {
+            InvalidFormulaDisplay();
+        }
     }
 
-    //private async void FilePick()
-    //{
-    //    FileResult? fileResult = await FilePicker.Default.PickAsync();
-    //    if (fileResult != null)
-    //    {
-    //        Debug.WriteLine("Successfully chose file: " + fileResult.FileName);
-    //        string fileContents = File.ReadAllText(fileResult.FullPath);
-    //        Debug.WriteLine("First 100 file chars:\n" + fileContents.Substring(0, 100));
-    //    }
-    //    else
-    //    {
-    //    }// did not pick a file
-
-    //}
-
+    private async void FileChoose()
+    {
+        FileResult? fileResult = await FilePicker.Default.PickAsync();
+        if (fileResult != null)
+        {
+            Debug.WriteLine("Successfully chose file: " + fileResult.FileName);
+            string fileContents = File.ReadAllText(fileResult.FullPath);
+            Debug.WriteLine("First 100 file chars:\n" + fileContents.Substring(0, 100));
+            spreadsheet = new Spreadsheet(fileResult.FileName, s => true, s => s.ToUpper(), "six");
+        }
+    }
+    
+    private void FileSave()
+    {
+        spreadsheet.Save("spreadsheet.txt");
+    }
+    private void OnHelpClicked(object sender, EventArgs e)
+    {
+        HelpDisplay();
+    }
+    private void NewFile(object sender, EventArgs e)
+    {
+        if (spreadsheet.Changed)
+        {
+            SaveWarningDisplay();
+        }
+        else
+        {
+            spreadsheet = new Spreadsheet(s => true, s => s.ToUpper(), "six");
+        }
+    }
+    private async void HelpDisplay()
+    {                            //async bool DisplayAlert( … )
+        await DisplayAlert(
+        "About the spreadsheet",      // Title
+        "Select a cell that you want to assign a value to, and enter either a digit" +
+        " or a formula. If you would like the formula to be evaluated, add an equal" +
+        " sign to the beggining of the formula and press enter. The calculated value" +
+        " of the cell should then appear at the very top and right inside the cell" +
+        " when it is not selected. The formula inside the cells may contain other cells." +
+        " You can eneter the digit or formula into a cell either by enetering it into" +
+        " the cell itself, or you can use the Contents widget at the top. The file button" +
+        " will give you the options to either upload a spreadsheet file or save the" +
+        " current spreadsheet into a file.", // Message 
+        "Ok");
+    }
+    private async void InvalidFormulaDisplay()
+    {
+        await DisplayAlert(
+        "Error",      // Title
+        "Cannot compute requested formula because the formula is invalid",
+        "Ok");
+    }
+    private async void SaveWarningDisplay()
+    {                            //async bool DisplayAlert( … )
+        bool overwrite = await DisplayAlert(
+        "Warning",      // Title
+        "Spreadsheet changed, do you want to continue?", // Message 
+        "Yes",              // True choice
+        "No");          // False Choice
+    }
 }
