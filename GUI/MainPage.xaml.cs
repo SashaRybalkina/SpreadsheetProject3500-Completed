@@ -84,12 +84,13 @@ public partial class MainPage : ContentPage
                 Entry entry = new Entry
                 {
                     StyleId = label,
-                    PlaceholderColor = Colors.Pink,
                     Text = "",
                     BackgroundColor = Colors.Pink,
                     HorizontalTextAlignment = TextAlignment.Center
                 };
                 entry.Focused += OnFocus;
+                entry.Unfocused += OnUnFocus;
+                entry.Completed += OnEntryCompletedCell;
                 stack.Add(
                 new Border
                 {
@@ -105,9 +106,7 @@ public partial class MainPage : ContentPage
             }
             Grid.Children.Add(stack);
         }
-        Contents.Completed += OnEntryCompleted;
-        ///Added
-        cells[CellName.Text].Completed += OnEntryCompleted;
+        Contents.Completed += OnEntryCompletedWidget;
     }
     private void SetCell(object sender, EventArgs e)
     {
@@ -123,14 +122,48 @@ public partial class MainPage : ContentPage
         CellName.Text = name;
         Contents.Text = spreadsheet.GetCellContents(name) + "";
         Value.Text = spreadsheet.GetCellValue(name) + "";
-        ///Added
-        entry.Text = spreadsheet.GetCellValue(name) + "";
+        cells[name].Text = spreadsheet.GetCellContents(name).ToString();
     }
 
-    private void OnEntryCompleted(object sender, EventArgs e)
+    private void OnUnFocus(object sender, EventArgs e)
+    {
+        Entry entry = (Entry)sender;
+        string name = entry.StyleId;
+        cells[name].Text = spreadsheet.GetCellValue(name).ToString();
+
+    }
+
+    private void OnEntryCompletedWidget(object sender, EventArgs e)
     {
         Entry entry = (Entry)sender;
         spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
-        cells[CellName.Text] = entry;
+        cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+        Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
+        Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
     }
+
+    private void OnEntryCompletedCell(object sender, EventArgs e)
+    {
+        Entry entry = (Entry)sender;
+        spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
+        cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+        Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
+        Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+    }
+    
+    private async void FilePick()
+    {
+        FileResult? fileResult = await FilePicker.Default.PickAsync();
+        if (fileResult != null)
+        {
+            Debug.WriteLine("Successfully chose file: " + fileResult.FileName);
+            string fileContents = File.ReadAllText(fileResult.FullPath);
+            Debug.WriteLine("First 100 file chars:\n" + fileContents.Substring(0, 100));
+        }
+        else
+        {
+        }// did not pick a file
+
+    }
+    
 }
