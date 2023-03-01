@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
 using SS;
@@ -101,7 +101,7 @@ public partial class MainPage : ContentPage
                     HorizontalOptions = LayoutOptions.Center,
                     Content = entry
                 }
-                ) ;
+                );
                 cells.Add(label, entry);
             }
             Grid.Children.Add(stack);
@@ -150,20 +150,20 @@ public partial class MainPage : ContentPage
         Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
         Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
     }
-    
-    private async void FilePick()
-    {
-        FileResult? fileResult = await FilePicker.Default.PickAsync();
-        if (fileResult != null)
-        {
-            Debug.WriteLine("Successfully chose file: " + fileResult.FileName);
-            string fileContents = File.ReadAllText(fileResult.FullPath);
-            Debug.WriteLine("First 100 file chars:\n" + fileContents.Substring(0, 100));
-        }
-        else
-        {
-        }// did not pick a file
 
-    }
-    
+    //private async void FilePick()
+    //{
+    //    FileResult? fileResult = await FilePicker.Default.PickAsync();
+    //    if (fileResult != null)
+    //    {
+    //        Debug.WriteLine("Successfully chose file: " + fileResult.FileName);
+    //        string fileContents = File.ReadAllText(fileResult.FullPath);
+    //        Debug.WriteLine("First 100 file chars:\n" + fileContents.Substring(0, 100));
+    //    }
+    //    else
+    //    {
+    //    }// did not pick a file
+
+    //}
+
 }
