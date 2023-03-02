@@ -175,7 +175,7 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private async void FileChoose()
+    private async void FileOpen()
     {
         FileResult? fileResult = await FilePicker.Default.PickAsync();
         if (fileResult != null)
@@ -187,14 +187,16 @@ public partial class MainPage : ContentPage
         }
     }
 
+    private void FileMenuOpenAsync()
+    {
+        FileOpen();
+    }
+
     private void FileSave(object sender, EventArgs e)
     {
         spreadsheet.Save("spreadsheet.txt");
     }
-    //private void OnHelpClicked(object sender, EventArgs e)
-    //{
-    //    HelpDisplay();
-    //}
+
     private void FileMenuNew(object sender, EventArgs e)
     {
         if (spreadsheet.Changed)
@@ -207,25 +209,21 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void FileMenuOpenAsync(object sender, EventArgs e)
-    {
-
-    }
     private async void HelpChangeSelectionDisplay(object sender, EventArgs e)
-    {                            
+    {
         //async bool DisplayAlert( … )
         await DisplayAlert(
-        "About the spreadsheet",      // Title
+        "How to change my selection",      // Title
         "Select a cell with your mouse that you want to focus on to see its contents" +
         " or to change its contents.", // Message 
         "Ok");
     }
 
     private async void HelpEditCellContentsDisplay(object sender, EventArgs e)
-    {                            
+    {
         //async bool DisplayAlert( … )
         await DisplayAlert(
-        "About the spreadsheet",      // Title
+        "How to edit cell contents",      // Title
         " Once the cell is selected, enter either a digit" +
         " or a formula. If you would like the formula to be evaluated, add an equal" +
         " sign to the beginning of the formula and press enter. The calculated value" +
@@ -239,7 +237,7 @@ public partial class MainPage : ContentPage
     private async void HelpFileDisplay(object sender, EventArgs e)
     {
         await DisplayAlert(
-        " About the File menu", // Title 
+        "How to save or open a file", // Title 
         " You can create a new spreadsheet, save your spreadsheet, or open a previously" +
         " created spreadsheet by clicking the \"File\" button at the top left of the" +
         " spreadsheet.", // Message
