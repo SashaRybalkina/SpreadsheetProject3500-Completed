@@ -184,7 +184,7 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void FileMenuOpenAsync()
+    private void FileMenuOpenAsync(object sender, EventArgs e)
     {
         FileOpen();
     }
@@ -263,5 +263,22 @@ public partial class MainPage : ContentPage
         "Error",      // Title
         "Cannot compute requested formula because the formula is invalid",
         "Ok");
+    }
+
+    private async void Randomize(object sender, EventArgs e)
+    {
+        bool response = await DisplayAlert("Warning", "Every cell in the spreadsheet will " +
+            "be assigned a random value, and any unsaved changes will be lost. Would you like to continue?", "Yes", "No");
+
+        if (response)
+        {
+            foreach (string name in cells.Keys)
+            {
+                Random random = new Random();
+                int input = random.Next(0, 100);
+                cells[name].Text = input + "";
+                spreadsheet.SetContentsOfCell(name, input + "");
+            }
+        }
     }
 }
