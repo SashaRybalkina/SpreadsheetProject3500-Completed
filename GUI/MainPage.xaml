@@ -13,7 +13,7 @@
             <MenuFlyoutItem Text="How to edit cell contents" Clicked="HelpEditCellContentsDisplay" />
             <MenuFlyoutItem Text="How to save or open a file" Clicked="HelpFileDisplay" />
         </MenuBarItem>
-               
+
     </ContentPage.MenuBarItems>
     <ScrollView
                     x:Name="Table"
@@ -26,7 +26,7 @@
             <Border
                 StrokeThickness="0"
                 HeightRequest="60">
-                <HorizontalStackLayout>                    
+                <HorizontalStackLayout>
                     <!--<Button x:Name="Help" Text="Help" Clicked="OnHelpClicked" HorizontalOptions="Center"/>-->
 
                     <Label x:Name="CellNameTitle" Text="Cell" WidthRequest="50"/>
