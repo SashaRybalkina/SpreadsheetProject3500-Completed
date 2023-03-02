@@ -118,8 +118,8 @@ public partial class MainPage : ContentPage
             Entry entry = (Entry)sender;
             string name = entry.StyleId;
             CellName.Text = name;
-            Contents.Text = spreadsheet.GetCellContents(name) + "";
-            Value.Text = spreadsheet.GetCellValue(name) + "";
+            //Contents.Text = spreadsheet.GetCellContents(name) + "";
+            //Value.Text = spreadsheet.GetCellValue(name) + "";
             cells[name].Text = spreadsheet.GetCellContents(name).ToString();
         }
         catch
@@ -134,6 +134,7 @@ public partial class MainPage : ContentPage
         {
             Entry entry = (Entry)sender;
             string name = entry.StyleId;
+            CellName.Text = name;
             cells[name].Text = spreadsheet.GetCellValue(name).ToString();
         }
         catch
@@ -185,16 +186,16 @@ public partial class MainPage : ContentPage
             spreadsheet = new Spreadsheet(fileResult.FileName, s => true, s => s.ToUpper(), "six");
         }
     }
-    
-    private void FileSave()
+
+    private void FileSave(object sender, EventArgs e)
     {
         spreadsheet.Save("spreadsheet.txt");
     }
-    private void OnHelpClicked(object sender, EventArgs e)
-    {
-        HelpDisplay();
-    }
-    private void NewFile(object sender, EventArgs e)
+    //private void OnHelpClicked(object sender, EventArgs e)
+    //{
+    //    HelpDisplay();
+    //}
+    private void FileMenuNew(object sender, EventArgs e)
     {
         if (spreadsheet.Changed)
         {
@@ -205,19 +206,43 @@ public partial class MainPage : ContentPage
             spreadsheet = new Spreadsheet(s => true, s => s.ToUpper(), "six");
         }
     }
-    private async void HelpDisplay()
-    {                            //async bool DisplayAlert( … )
+
+    private void FileMenuOpenAsync(object sender, EventArgs e)
+    {
+
+    }
+    private async void HelpChangeSelectionDisplay(object sender, EventArgs e)
+    {                            
+        //async bool DisplayAlert( … )
         await DisplayAlert(
         "About the spreadsheet",      // Title
-        "Select a cell that you want to assign a value to, and enter either a digit" +
+        "Select a cell with your mouse that you want to focus on to see its contents" +
+        " or to change its contents.", // Message 
+        "Ok");
+    }
+
+    private async void HelpEditCellContentsDisplay(object sender, EventArgs e)
+    {                            
+        //async bool DisplayAlert( … )
+        await DisplayAlert(
+        "About the spreadsheet",      // Title
+        " Once the cell is selected, enter either a digit" +
         " or a formula. If you would like the formula to be evaluated, add an equal" +
-        " sign to the beggining of the formula and press enter. The calculated value" +
+        " sign to the beginning of the formula and press enter. The calculated value" +
         " of the cell should then appear at the very top and right inside the cell" +
         " when it is not selected. The formula inside the cells may contain other cells." +
-        " You can eneter the digit or formula into a cell either by enetering it into" +
-        " the cell itself, or you can use the Contents widget at the top. The file button" +
-        " will give you the options to either upload a spreadsheet file or save the" +
-        " current spreadsheet into a file.", // Message 
+        " You can enter the digit or formula into a cell either by entering it into" +
+        " the cell itself, or you can use the Contents widget at the top.", // Message 
+        "Ok");
+    }
+
+    private async void HelpFileDisplay(object sender, EventArgs e)
+    {
+        await DisplayAlert(
+        " About the File menu", // Title 
+        " You can create a new spreadsheet, save your spreadsheet, or open a previously" +
+        " created spreadsheet by clicking the \"File\" button at the top left of the" +
+        " spreadsheet.", // Message
         "Ok");
     }
     private async void InvalidFormulaDisplay()
