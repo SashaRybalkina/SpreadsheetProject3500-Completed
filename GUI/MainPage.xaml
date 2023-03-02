@@ -2,7 +2,20 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GUI.MainPage">
-     <ScrollView
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Save" Clicked="FileSave" />
+            <MenuFlyoutItem Text="New" Clicked="FileMenuNew" />
+            <MenuFlyoutItem Text="Open" Clicked="FileMenuOpenAsync" />
+        </MenuBarItem>
+        <MenuBarItem Text="Help">
+            <MenuFlyoutItem Text="How to change my selection" Clicked="HelpChangeSelectionDisplay" />
+            <MenuFlyoutItem Text="How to edit cell contents" Clicked="HelpEditCellContentsDisplay" />
+            <MenuFlyoutItem Text="How to save or open a file" Clicked="HelpFileDisplay" />
+        </MenuBarItem>
+               
+    </ContentPage.MenuBarItems>
+    <ScrollView
                     x:Name="Table"
                     Orientation="Both"
                     HorizontalOptions="FillAndExpand"
@@ -12,33 +25,19 @@
             <!-- A Place to put the currently selected cell "name" and "value" -->
             <Border
                 StrokeThickness="0"
-                HeightRequest="40">
-                <HorizontalStackLayout>
-                <Label x:Name="CellName" Text="A1" WidthRequest="100"/>
-                <Label x:Name="Value" Text="" WidthRequest="100"/>
-                <Entry x:Name="Contents" Text="" WidthRequest="100"/>
+                HeightRequest="60">
+                <HorizontalStackLayout>                    
+                    <!--<Button x:Name="Help" Text="Help" Clicked="OnHelpClicked" HorizontalOptions="Center"/>-->
 
-                <Button x:Name="Help" Text="Help" Clicked="OnHelpClicked" HorizontalOptions="Center"/>
-                <Button x:Name="IdiotButton" Text="Click Me (If You Dare)" Clicked="OnIdiotClicked" HorizontalOptions="Center"/>
+                    <Label x:Name="CellNameTitle" Text="Cell" WidthRequest="50"/>
+                    <Label x:Name="CellName" Text="A1" WidthRequest="30"/>
+                    <Label x:Name="ValueTitle" Text="Value" WidthRequest="50"/>
+                    <Label x:Name="Value" Text="" WidthRequest="100"/>
+                    <Label x:Name="ContentsTitle" Text="Contents" WidthRequest="75"/>
+                    <Entry x:Name="Contents" Text="" WidthRequest="100"/>
 
-                <TableView Intent="Menu">
-                    <TableRoot>
-                        <TableSection Title="File">
-                            <TextCell
-                                Text="New"
-                                Detail="Creat a new file."
-                                Clicked="NewFile"/>   
-                            <TextCell
-                                Text="Save"
-                                Detail="Save spreadsheet to a file."
-                                Command="{Binding SaveCommand}"/>
-                            <TextCell
-                                Text="Open"
-                                Detail="Select existing spreadsheet file."
-                                Command="{Binding OpenCommand}"/>  
-                        </TableSection>
-                    </TableRoot>
-                </TableView>
+                    <!--<Button x:Name="IdiotButton" Text="Click Me (If You Dare)" Clicked="OnIdiotClicked" HorizontalOptions="Center"/>-->
+
 
                 </HorizontalStackLayout>
             </Border>
@@ -49,7 +48,64 @@
             <!-- the Grid of Spreadsheet GUI Cells -->
             <ScrollView>
                 <HorizontalStackLayout>
-                    <VerticalStackLayout x:Name="LeftLabels"  BackgroundColor="HotPink">  </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="LeftLabels"  BackgroundColor="HotPink"></VerticalStackLayout>
+                    <VerticalStackLayout x:Name="Grid"        BackgroundColor="Pink"></VerticalStackLayout>
+                </HorizontalStackLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage><?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GUI.MainPage">
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Save" Clicked="FileSave" />
+            <MenuFlyoutItem Text="New" Clicked="FileMenuNew" />
+            <MenuFlyoutItem Text="Open" Clicked="FileMenuOpenAsync" />
+        </MenuBarItem>
+        <MenuBarItem Text="Help">
+            <MenuFlyoutItem Text="How to change my selection" Clicked="HelpChangeSelectionDisplay" />
+            <MenuFlyoutItem Text="How to edit cell contents" Clicked="HelpEditCellContentsDisplay" />
+            <MenuFlyoutItem Text="How to save or open a file" Clicked="HelpFileDisplay" />
+        </MenuBarItem>
+               
+    </ContentPage.MenuBarItems>
+    <ScrollView
+                    x:Name="Table"
+                    Orientation="Both"
+                    HorizontalOptions="FillAndExpand"
+                    HorizontalScrollBarVisibility="Always"
+                    HeightRequest="500">
+        <VerticalStackLayout x:Name="Entire">
+            <!-- A Place to put the currently selected cell "name" and "value" -->
+            <Border
+                StrokeThickness="0"
+                HeightRequest="60">
+                <HorizontalStackLayout>                    
+                    <!--<Button x:Name="Help" Text="Help" Clicked="OnHelpClicked" HorizontalOptions="Center"/>-->
+
+                    <Label x:Name="CellNameTitle" Text="Cell" WidthRequest="50"/>
+                    <Label x:Name="CellName" Text="A1" WidthRequest="30"/>
+                    <Label x:Name="ValueTitle" Text="Value" WidthRequest="50"/>
+                    <Label x:Name="Value" Text="" WidthRequest="100"/>
+                    <Label x:Name="ContentsTitle" Text="Contents" WidthRequest="75"/>
+                    <Entry x:Name="Contents" Text="" WidthRequest="100"/>
+
+                    <!--<Button x:Name="IdiotButton" Text="Click Me (If You Dare)" Clicked="OnIdiotClicked" HorizontalOptions="Center"/>-->
+
+
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- the column headers: A, B, C, ... -->
+            <HorizontalStackLayout x:Name="TopLabels" BackgroundColor="HotPink"/>
+
+            <!-- the Grid of Spreadsheet GUI Cells -->
+            <ScrollView>
+                <HorizontalStackLayout>
+                    <VerticalStackLayout x:Name="LeftLabels"  BackgroundColor="HotPink"></VerticalStackLayout>
                     <VerticalStackLayout x:Name="Grid"        BackgroundColor="Pink"></VerticalStackLayout>
                 </HorizontalStackLayout>
             </ScrollView>
