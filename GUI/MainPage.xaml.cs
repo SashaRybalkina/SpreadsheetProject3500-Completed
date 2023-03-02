@@ -7,13 +7,36 @@ using Label = Microsoft.Maui.Controls.Label;
 
 namespace GUI;
 
+/// <summary>
+/// Author: Victoria Locke
+/// Partner: Sasha Rybalkina
+/// Date:   March 3, 2023
+/// Course: CS 3500, University of Utah
+/// Copyright: CS 3500 and Victoria Locke's work may not
+///            be copied for use in Academic Coursework
+/// I, Victoria Locke, certify that I wrote this code from scratch and
+/// did not copy it in part or whole from another source.  All 
+/// references used in the completion of the assignments are cited 
+/// in my README file.
+///
+/// File Contents
+///
+///     This class creates a visual representation of a spreadsheet using
+///     MAUI. It can visually update cells' values and contents using the widgets
+///     at the top or the cell itself. There is a help menu and a file menu. The
+///     help menu gives the user specific options for getting information on
+///     specific questions. The file menu allows for the user to savve the file, open 
+///     an older file, or open a new file. There is also a unique button, which 
+///     randomizes each individual cell of the spreadsheet.
+/// </summary>
+
 public partial class MainPage : ContentPage
 {
-    private static int colCount = 10;
-    private static int rowCount = 10;
+    private static int colCount = 26;
+    private static int rowCount = 99;
 
     char[] columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
-    int[] rows = Enumerable.Range(1, colCount + 1).ToArray();
+    int[] rows = Enumerable.Range(1, rowCount + 1).ToArray();
 
     private Dictionary<string, Entry> cells = new();
 
@@ -24,6 +47,9 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         BuildGUI();
     }
+    /// <summary>
+    /// Builds the visual representation of the Spreadsheet
+    /// </summary>
     private void BuildGUI()
     {
         for (int i = 0; i < colCount; i++)
@@ -35,7 +61,7 @@ public partial class MainPage : ContentPage
             }
             else
             {
-                label = columns[i - 1] + "";
+                label = columns[i - 1].ToString();
             }
             TopLabels.Add(
             new Border
@@ -57,7 +83,7 @@ public partial class MainPage : ContentPage
         }
         for (int i = 0; i < rowCount; i++)
         {
-            string label = rows[i] + "";
+            string label = rows[i].ToString();
             LeftLabels.Add(
             new Border
             {
@@ -110,6 +136,12 @@ public partial class MainPage : ContentPage
         Contents.Completed += OnEntryCompletedWidget;
     }
 
+    /// <summary>
+    ///  A private helper method which displays the contents of the cell, when the cell 
+    ///  is focused on
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnFocus(object sender, EventArgs e)
     {
         try
@@ -125,6 +157,12 @@ public partial class MainPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// A private helper method which displays the value of the cell, when the cell
+    /// is not focused on
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnUnFocus(object sender, EventArgs e)
     {
         try
@@ -140,6 +178,13 @@ public partial class MainPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// A private helper method which updates the cells contents and value when the contents
+    /// are entered directly into the widget, instead of the cell. If an invalid formula is entered 
+    /// an error window is displayed
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnEntryCompletedWidget(object sender, EventArgs e)
     {
         try
@@ -156,6 +201,13 @@ public partial class MainPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// A private helper method which updates the cells contents to show correctly in the widgets
+    /// when the contents are entered directly into the cell, instead of the widget. If an invalid
+    /// formula is entered an error window is displayed
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnEntryCompletedCell(object sender, EventArgs e)
     {
         try
@@ -172,7 +224,11 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private async void FileMenuOpenAsync(object sender, EventArgs e)
+    /// <summary>
+    /// A private helper method to open a file, when the user selects the 'Open' option in the
+    /// file menu
+    /// </summary>
+    private async void FileMenuOpen(object sender, EventArgs e)
     {
         FileResult? fileResult = await FilePicker.Default.PickAsync();
         if (fileResult != null)
@@ -184,16 +240,24 @@ public partial class MainPage : ContentPage
         }
     }
 
-    private void FileMenuOpenAsync(object sender, EventArgs e)
-    {
-        FileOpen();
-    }
-
-    private void FileSave(object sender, EventArgs e)
+    /// <summary>
+    /// A private helper method to save the spreadsheet file, when the user selects the 'Save' option
+    /// in the file menu
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void FileMenuSave(object sender, EventArgs e)
     {
         spreadsheet.Save("C:\\Users\\Desktop\\spreadsheet.txt");
     }
 
+    /// <summary>
+    /// A private helper method to open up a new spreadsheet file. Clears the spreadsheet.
+    /// If the user has not saved the file before opening a new one a warning window is displayed
+    /// asking the user if they are sure they want to move on without saving.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void FileMenuNew(object sender, EventArgs e)
     {
         if (spreadsheet.Changed)
@@ -210,6 +274,9 @@ public partial class MainPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// A private helper method that clears the entire spreadsheet.
+    /// </summary>
     private void ClearSpreadsheet()
     {
         spreadsheet = new Spreadsheet(s => true, s => s.ToUpper(), "six");
@@ -222,6 +289,12 @@ public partial class MainPage : ContentPage
         Contents.Text = "";
     }
 
+    /// <summary>
+    /// A private helper method which does a unique task - randomizes every single cell value in
+    /// the spreadsheet.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void Randomize(object sender, EventArgs e)
     {
         bool response = await DisplayAlert("Warning", "Every cell in the spreadsheet will " +
@@ -239,6 +312,12 @@ public partial class MainPage : ContentPage
         }
     }
 
+    /// <summary>
+    /// A private helper method that displays a window which explains how to change the user's
+    /// cell selection, when the user opens the help menu and clicks the Change Selection help option
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void HelpChangeSelectionDisplay(object sender, EventArgs e)
     {
         //async bool DisplayAlert( … )
@@ -249,6 +328,12 @@ public partial class MainPage : ContentPage
         "Ok");
     }
 
+    /// <summary>
+    /// A private helper method that displays a window which explains how to edit the user's
+    /// cell contents, when the user opens the help menu and clicks the Edit Cell Contents help option
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void HelpEditCellContentsDisplay(object sender, EventArgs e)
     {
         //async bool DisplayAlert( … )
@@ -264,16 +349,30 @@ public partial class MainPage : ContentPage
         "Ok");
     }
 
+    /// <summary>
+    /// A private helper method that displays a window which explains the file menu contents when
+    /// the user opens the help menu and clicks the File help option
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private async void HelpFileDisplay(object sender, EventArgs e)
     {
         await DisplayAlert(
         "How to save or open a file", // Title 
         " You can create a new spreadsheet, save your spreadsheet, or open a previously" +
         " created spreadsheet by clicking the \"File\" button at the top left of the" +
-        " spreadsheet.", // Message
+        " spreadsheet." +
+        " If you choose to save a file please save the file with the exact path name for" +
+        " where you would like to save your file to, and what you would like to save your file" +
+        " name as. " +
+        " You must save your file with '.sprd'", // Message
         "Ok");
     }
 
+    /// <summary>
+    /// A private helper method that displays a window which that tells the user their formula was
+    /// invalid, instead of throwing an error and crashing the spreadsheet application.
+    /// </summary>
     private async void InvalidFormulaDisplay()
     {
         await DisplayAlert(

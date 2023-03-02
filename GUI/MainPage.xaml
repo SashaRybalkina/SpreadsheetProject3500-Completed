@@ -4,9 +4,9 @@
              x:Class="GUI.MainPage">
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
-            <MenuFlyoutItem Text="Save" Clicked="FileSave" />
+            <MenuFlyoutItem Text="Save" Clicked="FileMenuSave" />
             <MenuFlyoutItem Text="New" Clicked="FileMenuNew" />
-            <MenuFlyoutItem Text="Open" Clicked="FileMenuOpenAsync" />
+            <MenuFlyoutItem Text="Open" Clicked="FileMenuOpen" />
         </MenuBarItem>
         <MenuBarItem Text="Help">
             <MenuFlyoutItem Text="How to change my selection" Clicked="HelpChangeSelectionDisplay" />
@@ -27,7 +27,6 @@
                 StrokeThickness="0"
                 HeightRequest="60">
                 <HorizontalStackLayout>
-                    <!--<Button x:Name="Help" Text="Help" Clicked="OnHelpClicked" HorizontalOptions="Center"/>-->
 
                     <Label x:Name="CellNameTitle" Text="Cell" WidthRequest="50"/>
                     <Label x:Name="CellName" Text="A1" WidthRequest="30"/>
@@ -35,10 +34,8 @@
                     <Label x:Name="Value" Text="" WidthRequest="100"/>
                     <Label x:Name="ContentsTitle" Text="Contents" WidthRequest="75"/>
                     <Entry x:Name="Contents" Text="" WidthRequest="100"/>
+                    <!-- A button to fulfill the 'unique requirement' - randomizes the cell values-->
                     <Button x:Name="Randomizer" Text="Randomizer" Clicked="Randomize" BackgroundColor="Orange"></Button>
-
-                    <!--<Button x:Name="IdiotButton" Text="Click Me (If You Dare)" Clicked="OnIdiotClicked" HorizontalOptions="Center"/>-->
-
 
                 </HorizontalStackLayout>
             </Border>
