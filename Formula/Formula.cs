@@ -431,7 +431,7 @@ namespace SpreadsheetUtilities
         /// <returns>The Formula object in string form</returns>
         public override string ToString()
         {
-            return formula;
+            return "=" + formula;
         }
         /// <summary>
         /// This method compares two Formula objects and determines if they are

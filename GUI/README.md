@@ -31,3 +31,4 @@ TAs
 	4. VisualElement.Unfocused Event - https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.visualelement.unfocused?view=net-maui-6.0
 	5. Assignment 6 - Spreadsheet Front-End Graphical User Interface - https://utah.instructure.com/courses/834041/assignments/11982613?module_item_id=19990018
 	6. GitHub ForStudents/Examples/For3500EventsAddViaCode/For3500EventsAddViaCode/ - https://github.com/uofu-cs3500-spring23/ForStudents/tree/main/Examples/For3500EventsAddViaCode/For3500EventsAddViaCode
+	7. Page.DisplayPromptAsync Method - https://learn.microsoft.com/en-us/dotnet/api/xamarin.forms.page.displaypromptasync?view=xamarin-forms

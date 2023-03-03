@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Windows.Input;
+using SpreadsheetUtilities;
 using SS;
 using Label = Microsoft.Maui.Controls.Label;
 
@@ -22,18 +23,18 @@ namespace GUI;
 /// File Contents
 ///
 ///     This class creates a visual representation of a spreadsheet using
-///     MAUI. It can visually update cells' values and contents using the widgets
+///     .NET MAUI. It can visually update cells' values and contents using the widgets
 ///     at the top or the cell itself. There is a help menu and a file menu. The
 ///     help menu gives the user specific options for getting information on
-///     specific questions. The file menu allows for the user to savve the file, open 
-///     an older file, or open a new file. There is also a unique button, which 
+///     specific questions. The file menu allows for the user to save the file, open 
+///     an older file, or create a new file. There is also a unique button, which 
 ///     randomizes each individual cell of the spreadsheet.
 /// </summary>
 
 public partial class MainPage : ContentPage
 {
-    private static int colCount = 26;
-    private static int rowCount = 99;
+    private static int colCount = 10;
+    private static int rowCount = 10;
 
     char[] columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
     int[] rows = Enumerable.Range(1, rowCount + 1).ToArray();
@@ -147,9 +148,21 @@ public partial class MainPage : ContentPage
         try
         {
             Entry entry = (Entry)sender;
+            entry.BackgroundColor = Colors.Yellow;
             string name = entry.StyleId;
             CellName.Text = name;
-            cells[name].Text = spreadsheet.GetCellContents(name).ToString();
+            if (spreadsheet.GetCellValue(CellName.Text) is FormulaError)
+            {
+                cells[CellName.Text].Text = "ERROR";
+                Value.Text = "ERROR";
+                Contents.Text = spreadsheet.GetCellContents(name).ToString();
+            }
+            else
+            {
+                cells[name].Text = spreadsheet.GetCellContents(name).ToString();
+                Value.Text = spreadsheet.GetCellValue(name).ToString();
+                Contents.Text = spreadsheet.GetCellContents(name).ToString();
+            }
         }
         catch
         {
@@ -168,11 +181,20 @@ public partial class MainPage : ContentPage
         try
         {
             Entry entry = (Entry)sender;
+            entry.BackgroundColor = Colors.Pink;
             string name = entry.StyleId;
             CellName.Text = name;
-            cells[name].Text = spreadsheet.GetCellValue(name).ToString();
+            if (spreadsheet.GetCellValue(CellName.Text) is FormulaError)
+            {
+                cells[CellName.Text].Text = "ERROR";
+                Value.Text = "ERROR";
+            }
+            else
+            {
+                cells[name].Text = spreadsheet.GetCellValue(name).ToString();
+            }
         }
-        catch
+        catch 
         {
             InvalidFormulaDisplay();
         }
@@ -191,9 +213,18 @@ public partial class MainPage : ContentPage
         {
             Entry entry = (Entry)sender;
             spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
-            cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
-            Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
-            Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+            if (spreadsheet.GetCellValue(CellName.Text) is FormulaError)
+            {
+                cells[CellName.Text].Text = "ERROR";
+                Value.Text = "ERROR";
+                Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
+            }
+            else
+            {
+                cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+                Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
+                Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+            }
         }
         catch
         {
@@ -213,10 +244,23 @@ public partial class MainPage : ContentPage
         try
         {
             Entry entry = (Entry)sender;
-            spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
+            IList<string> dependees = spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
             cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
-            Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
-            Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+            if (spreadsheet.GetCellValue(CellName.Text) is FormulaError)
+            {
+                cells[CellName.Text].Text = "ERROR";
+                Value.Text = "ERROR";
+                Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
+            }
+            else
+            {
+                Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
+                Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+                foreach (string cell in dependees)
+                {
+                    cells[cell].Text = spreadsheet.GetCellValue(cell).ToString();
+                }
+            }
         }
         catch
         {
@@ -230,13 +274,24 @@ public partial class MainPage : ContentPage
     /// </summary>
     private async void FileMenuOpen(object sender, EventArgs e)
     {
-        FileResult? fileResult = await FilePicker.Default.PickAsync();
-        if (fileResult != null)
+        try
         {
-            Debug.WriteLine("Successfully chose file: " + fileResult.FileName);
-            string fileContents = File.ReadAllText(fileResult.FullPath);
-            Debug.WriteLine("First 100 file chars:\n" + fileContents.Substring(0, 100));
-            spreadsheet = new Spreadsheet(fileResult.FileName, s => true, s => s.ToUpper(), "six");
+            FileResult? fileResult = await FilePicker.Default.PickAsync();
+            if (fileResult != null)
+            {
+                Debug.WriteLine("Successfully chose file: " + fileResult.FileName);
+                string fileContents = File.ReadAllText(fileResult.FullPath);
+                Debug.WriteLine("First 100 file chars:\n" + fileContents.Substring(0, 100));
+                spreadsheet = new Spreadsheet(fileResult.FullPath, s => true, s => s.ToUpper(), "six");
+                foreach (string cell in spreadsheet.GetNamesOfAllNonemptyCells())
+                {
+                    cells[cell].Text = spreadsheet.GetCellValue(cell).ToString();
+                }
+            }
+        }
+        catch
+        {
+            FilePathOrNameIncorrectDisplay();
         }
     }
 
@@ -246,9 +301,24 @@ public partial class MainPage : ContentPage
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void FileMenuSave(object sender, EventArgs e)
+    private async void FileMenuSave(object sender, EventArgs e)
     {
-        spreadsheet.Save("C:\\Users\\Desktop\\spreadsheet.txt");
+        string userPath;
+        userPath = await DisplayPromptAsync(
+            " Save File",
+            " Please enter the full path for where you would like to save" +
+            " your file to. " +
+            " \nThe file must be of '.sprd' type.",
+            " Save",
+            " Cancel");
+        if (userPath == null || userPath == "" || userPath.Substring(userPath.Length - 5) != ".sprd")
+        {
+            FilePathOrNameIncorrectDisplay();
+        }
+        else
+        {
+            spreadsheet.Save(userPath);
+        }
     }
 
     /// <summary>
@@ -308,6 +378,8 @@ public partial class MainPage : ContentPage
                 int input = random.Next(0, 100);
                 cells[name].Text = input + "";
                 spreadsheet.SetContentsOfCell(name, input + "");
+                Value.Text = spreadsheet.GetCellValue(name).ToString();
+                Contents.Text = spreadsheet.GetCellContents(name).ToString();
             }
         }
     }
@@ -341,11 +413,12 @@ public partial class MainPage : ContentPage
         "How to edit cell contents",      // Title
         " Once the cell is selected, enter either a digit" +
         " or a formula. If you would like the formula to be evaluated, add an equal" +
-        " sign to the beginning of the formula and press enter. The calculated value" +
-        " of the cell should then appear at the very top and right inside the cell" +
-        " when it is not selected. The formula inside the cells may contain other cells." +
-        " You can enter the digit or formula into a cell either by entering it into" +
-        " the cell itself, or you can use the Contents widget at the top.", // Message 
+        " sign to the beginning of the formula and press enter. You must press enter for" +
+        " your contents to be saved to the cell. The calculated value of the cell should" + 
+        " then appear at the very top and right inside the cell when it is not selected." + 
+        " The formula inside the cells may contain other cells. You can enter the digit" +
+        " or formula into a cell either by entering it into the cell itself, or you can" +
+        " use the Contents widget at the top.", // Message 
         "Ok");
     }
 
@@ -369,6 +442,24 @@ public partial class MainPage : ContentPage
         "Ok");
     }
 
+    private async void FilePathOrNameIncorrectDisplay()
+    {
+        await DisplayAlert(
+        " Uh oh!",
+        " Your file name or path is incorrect. The file did not save. " +
+        "\n Make sure your file is of '.sprd' type" +
+        "\n Try saving again.", // Message
+        "Ok") ;
+    }
+
+    private async void UnableToOpenFile()
+    {
+        await DisplayAlert(
+            "Unable to open file",
+            " The file you chose to open could not be opened. Try selecting" +
+            " a different file.",
+            "Ok");
+    }
     /// <summary>
     /// A private helper method that displays a window which that tells the user their formula was
     /// invalid, instead of throwing an error and crashing the spreadsheet application.

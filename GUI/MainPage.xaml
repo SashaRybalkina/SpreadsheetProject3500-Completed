@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GUI.MainPage">
+  
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
             <MenuFlyoutItem Text="Save" Clicked="FileMenuSave" />
@@ -28,14 +29,14 @@
                 HeightRequest="60">
                 <HorizontalStackLayout>
 
-                    <Label x:Name="CellNameTitle" Text="Cell" WidthRequest="50"/>
-                    <Label x:Name="CellName" Text="A1" WidthRequest="30"/>
-                    <Label x:Name="ValueTitle" Text="Value" WidthRequest="50"/>
-                    <Label x:Name="Value" Text="" WidthRequest="100"/>
-                    <Label x:Name="ContentsTitle" Text="Contents" WidthRequest="75"/>
-                    <Entry x:Name="Contents" Text="" WidthRequest="100"/>
+                    <Label x:Name="CellNameTitle" Text="Cell" WidthRequest="50" HeightRequest="30"/>
+                    <Label x:Name="CellName" Text="A1" WidthRequest="30" HeightRequest="30"/>
+                    <Label x:Name="ValueTitle" Text="Value" WidthRequest="50" HeightRequest="30"/>
+                    <Label x:Name="Value" Text="" WidthRequest="100" HeightRequest="30"/>
+                    <Label x:Name="ContentsTitle" Text="Contents" WidthRequest="75" HeightRequest="30"/>
+                    <Entry x:Name="Contents" Text="" WidthRequest="100" HeightRequest="30"/>
                     <!-- A button to fulfill the 'unique requirement' - randomizes the cell values-->
-                    <Button x:Name="Randomizer" Text="Randomizer" Clicked="Randomize" BackgroundColor="Orange"></Button>
+                    <Button x:Name="Randomizer" Text="Randomizer" WidthRequest="150" HeightRequest="50" Clicked="Randomize" BackgroundColor="Orange"></Button>
 
                 </HorizontalStackLayout>
             </Border>
