@@ -39,4 +39,4 @@ Hours Estimated/Worked		Assignment							Notes
 	10	/	13			- Assignment 4 - Spreadsheet			Took awhile to figure out what the Visit method did and how
 	13	/	19			- Assignment 5 - Complete Spreadsheet	XML files were very difficult to figure out	to test it 
 																(prevented me from achieving 100% line/branch coverage)
-	14	/				- Assignment 6 - Spreadsheet Front-End
+	14	/	14			- Assignment 6 - Spreadsheet Front-End	Had an issue figuring out how to get the git team repo to work

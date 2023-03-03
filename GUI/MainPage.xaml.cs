@@ -33,8 +33,8 @@ namespace GUI;
 
 public partial class MainPage : ContentPage
 {
-    private static int colCount = 10;
-    private static int rowCount = 10;
+    private static int colCount = 26;
+    private static int rowCount = 99;
 
     char[] columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
     int[] rows = Enumerable.Range(1, rowCount + 1).ToArray();
