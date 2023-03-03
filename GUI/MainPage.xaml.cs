@@ -22,8 +22,8 @@ namespace GUI;
 ///
 /// File Contents
 ///
-///     This class creates a visual representation of a spreadsheet using
-///     .NET MAUI. It can visually update cells' values and contents using the widgets
+///     This class creates a visual representation of a spreadsheet using .NET
+///     MAUI. It can visually update cells' values and contents using the widgets
 ///     at the top or the cell itself. There is a help menu and a file menu. The
 ///     help menu gives the user specific options for getting information on
 ///     specific questions. The file menu allows for the user to save the file, open 
@@ -39,6 +39,7 @@ public partial class MainPage : ContentPage
     char[] columns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
     int[] rows = Enumerable.Range(1, rowCount + 1).ToArray();
 
+    // keeps track of each cell's name and contents
     private Dictionary<string, Entry> cells = new();
 
     private AbstractSpreadsheet spreadsheet = new Spreadsheet(s => true, s => s.ToUpper(), "six");
@@ -48,8 +49,9 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         BuildGUI();
     }
+
     /// <summary>
-    /// Builds the visual representation of the Spreadsheet
+    /// Builds the visual representation of the Spreadsheet with the alphabet columns and 99 rows
     /// </summary>
     private void BuildGUI()
     {
@@ -116,8 +118,11 @@ public partial class MainPage : ContentPage
                     BackgroundColor = Colors.Pink,
                     HorizontalTextAlignment = TextAlignment.Center
                 };
+                // if the entry is focused on then calls the method OnFocus()
                 entry.Focused += OnFocus;
+                // if the entry is not currently focused on then calls the method OnUnFocus()
                 entry.Unfocused += OnUnFocus;
+                // once the entry is completed then calls the method OnEntryCompleted()
                 entry.Completed += OnEntryCompletedCell;
                 stack.Add(
                 new Border
@@ -134,12 +139,14 @@ public partial class MainPage : ContentPage
             }
             Grid.Children.Add(stack);
         }
+        // calls the method OnEntryCompletedWidget() to update the widget contents 
         Contents.Completed += OnEntryCompletedWidget;
     }
 
     /// <summary>
     ///  A private helper method which displays the contents of the cell, when the cell 
-    ///  is focused on
+    ///  is focused on. If there is an error with the formula a warning pops up explaining
+    ///  the invalid formula error.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -151,14 +158,17 @@ public partial class MainPage : ContentPage
             entry.BackgroundColor = Colors.Yellow;
             string name = entry.StyleId;
             CellName.Text = name;
+            // if the contents entered into the cell cause a FormulaError each cell will display "ERROR"
             if (spreadsheet.GetCellValue(CellName.Text) is FormulaError)
             {
                 cells[CellName.Text].Text = "ERROR";
                 Value.Text = "ERROR";
                 Contents.Text = spreadsheet.GetCellContents(name).ToString();
             }
+            // if the contents cause no problems then the cells and widgets will update appropriately
             else
             {
+                // cells display contents when focused on
                 cells[name].Text = spreadsheet.GetCellContents(name).ToString();
                 Value.Text = spreadsheet.GetCellValue(name).ToString();
                 Contents.Text = spreadsheet.GetCellContents(name).ToString();
@@ -172,7 +182,8 @@ public partial class MainPage : ContentPage
 
     /// <summary>
     /// A private helper method which displays the value of the cell, when the cell
-    /// is not focused on
+    /// is not focused on. If there is an error with the formula a warning pops up explaining
+    ///  the invalid formula error.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -184,13 +195,16 @@ public partial class MainPage : ContentPage
             entry.BackgroundColor = Colors.Pink;
             string name = entry.StyleId;
             CellName.Text = name;
+            // if the contents entered into the cell cause a FormulaError each cell will display "ERROR"
             if (spreadsheet.GetCellValue(CellName.Text) is FormulaError)
             {
                 cells[CellName.Text].Text = "ERROR";
                 Value.Text = "ERROR";
             }
+            // if the contents cause no problems then everything will update normally
             else
             {
+                // cells display the value if they are not focused on
                 cells[name].Text = spreadsheet.GetCellValue(name).ToString();
             }
         }
@@ -203,7 +217,7 @@ public partial class MainPage : ContentPage
     /// <summary>
     /// A private helper method which updates the cells contents and value when the contents
     /// are entered directly into the widget, instead of the cell. If an invalid formula is entered 
-    /// an error window is displayed
+    /// an error window is displayed.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -213,12 +227,14 @@ public partial class MainPage : ContentPage
         {
             Entry entry = (Entry)sender;
             spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
+            // if the contents entered into the cell cause a FormulaError each cell will display "ERROR" 
             if (spreadsheet.GetCellValue(CellName.Text) is FormulaError)
             {
                 cells[CellName.Text].Text = "ERROR";
                 Value.Text = "ERROR";
                 Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
             }
+            // if the contents cause no problems then everything will update normally
             else
             {
                 cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
@@ -235,7 +251,7 @@ public partial class MainPage : ContentPage
     /// <summary>
     /// A private helper method which updates the cells contents to show correctly in the widgets
     /// when the contents are entered directly into the cell, instead of the widget. If an invalid
-    /// formula is entered an error window is displayed
+    /// formula is entered an error window is displayed.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -246,16 +262,20 @@ public partial class MainPage : ContentPage
             Entry entry = (Entry)sender;
             IList<string> dependees = spreadsheet.SetContentsOfCell(CellName.Text, entry.Text);
             cells[CellName.Text].Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+            // if the contents entered into the cell cause a FormulaError each cell will display "ERROR" 
             if (spreadsheet.GetCellValue(CellName.Text) is FormulaError)
             {
                 cells[CellName.Text].Text = "ERROR";
                 Value.Text = "ERROR";
                 Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
             }
+            // if the contents cause no problems then everything will update normally
             else
             {
                 Contents.Text = spreadsheet.GetCellContents(CellName.Text).ToString();
                 Value.Text = spreadsheet.GetCellValue(CellName.Text).ToString();
+                // updates the dependencies - if a cell updates its contents and another cell depends on that value
+                // that cell will also update
                 foreach (string cell in dependees)
                 {
                     cells[cell].Text = spreadsheet.GetCellValue(cell).ToString();
@@ -270,7 +290,8 @@ public partial class MainPage : ContentPage
 
     /// <summary>
     /// A private helper method to open a file, when the user selects the 'Open' option in the
-    /// file menu
+    /// file menu. If an incorrect file path is entered or any other error occurs, an error window
+    /// is displayed explaining the error. 
     /// </summary>
     private async void FileMenuOpen(object sender, EventArgs e)
     {
@@ -283,6 +304,7 @@ public partial class MainPage : ContentPage
                 string fileContents = File.ReadAllText(fileResult.FullPath);
                 Debug.WriteLine("First 100 file chars:\n" + fileContents.Substring(0, 100));
                 spreadsheet = new Spreadsheet(fileResult.FullPath, s => true, s => s.ToUpper(), "six");
+                // updates each cell to display the correct information from the opened file
                 foreach (string cell in spreadsheet.GetNamesOfAllNonemptyCells())
                 {
                     cells[cell].Text = spreadsheet.GetCellValue(cell).ToString();
@@ -297,7 +319,8 @@ public partial class MainPage : ContentPage
 
     /// <summary>
     /// A private helper method to save the spreadsheet file, when the user selects the 'Save' option
-    /// in the file menu
+    /// in the file menu. If the user tries to save a file with an incorrect file path, or the file is
+    /// not of type '.sprd', an error window is displayed explaining the error. 
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -354,6 +377,7 @@ public partial class MainPage : ContentPage
         {
             cells[name].Text = "";
         }
+        // updates the widget back to default
         CellName.Text = "A1";
         Value.Text = "";
         Contents.Text = "";
@@ -372,6 +396,7 @@ public partial class MainPage : ContentPage
 
         if (response)
         {
+            // adds a random number to every single cell in the spreadsheet
             foreach (string name in cells.Keys)
             {
                 Random random = new Random();
@@ -442,6 +467,10 @@ public partial class MainPage : ContentPage
         "Ok");
     }
 
+    /// <summary>
+    /// A private helper method that displays a window which explains the error which occurred when an 
+    /// incorrect file path or name was entered by the user when trying to save the spreadsheet. 
+    /// </summary>
     private async void FilePathOrNameIncorrectDisplay()
     {
         await DisplayAlert(
@@ -452,6 +481,10 @@ public partial class MainPage : ContentPage
         "Ok") ;
     }
 
+    /// <summary>
+    /// A private helper method that displays a window which explains that the file the user chose
+    /// to open cannot be opened. 
+    /// </summary>
     private async void UnableToOpenFile()
     {
         await DisplayAlert(

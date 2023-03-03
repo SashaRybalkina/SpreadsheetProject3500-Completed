@@ -12,8 +12,8 @@ use in Academic Coursework
 
 # Comments to Evaluators:
 
-The spreadsheet is sometimes laggy and requires extra waiting time to load,
-especially for the Randomize additional feature.
+The spreadsheet is lags a little bit sometimes and requires extra waiting time to load,
+especially for the Randomize additional feature, so please be patient with it while grading :)
 
 # Partnership
 
@@ -35,29 +35,29 @@ Together
 
 # Branching
 
-Didn't make any branches but made sure to frequentely commit our work to git so
+Didn't make any branches but made sure to frequently commit our work to git so
 that each partner could contribute by pulling the most recent code.
 
 # Additional Features
 
 A "Randomizer" button which puts a random value into every single cell.
 
-# Design descisions
+# Design Decisions
 
-Made the help menu have three different dropdowns for specific topics for more
+Made the help menu have three different drop downs for specific topics for more
 clarity and better organization.
 
 Made every selected cell highlighted to a different color
 
 # Time Tracking
 
-Estimated / Actual
+Hours Estimated / Actual
 
 	14 / 14
 
 	Progress Towards Completion:	 	 10 Hours
 	Debugging:							 3 Hours
-	Spent Leraning Tools And Techniques: 1 Hours
+	Spent Learning Tools And Techniques: 1 Hours
 	Spent Together:						 10 Hours
 	Tori:								 2 Hours (commenting & writing SaveFile())
 	Sasha:								 2 Hours (building the GUI and writing warnings)
@@ -76,7 +76,7 @@ communication of ideas. If one of us didn't understand something or was confused
 able to effectively explain it and code. This made the coding process faster because we weren't
 caught up on a singular topic for too long.
 
-We could improve on time efficiency and starting on assignmnets earlier. We ran into an issue
+We could improve on time efficiency and starting on assignments earlier. We ran into an issue
 where we felt like we needed more time than what we had left, which caused us to spend a long
 period of time coding in one sitting. Overall, being better on time efficiency will allow us
 to be less stressed and burned out.
